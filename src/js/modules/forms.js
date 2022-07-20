@@ -66,9 +66,17 @@ const forms = (state) => {
             statusMessage.appendChild(textMessage);
 
             const formData = new FormData(item);
+            if(item.getAttribute('data-calc') === "end") {
+
+                formData.append('total-price', document.querySelector('.calc-price').textContent);
+                for(let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
             let api;
             item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
-            console.log(api)
+            
+            console.log(api);
 
             postData(api, formData)
                 .then(res => {

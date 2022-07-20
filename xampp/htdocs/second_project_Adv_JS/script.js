@@ -4350,6 +4350,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInput */ "./src/js/modules/checkTextInput.js");
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+
+
 
 
 
@@ -4359,15 +4363,147 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
+  var modalState = {};
+  Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_7__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
   Object(_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
-  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_2__["default"])(modalState);
   Object(_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   Object(_modules_checkTextInput__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   Object(_modules_checkTextInput__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   Object(_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
+  Object(_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price');
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/requests */ "./src/services/requests.js");
+
+
+
+
+var calc = function calc(size, material, options, promocode, result) {
+  var sizeBlock = document.querySelector(size),
+      materialBlock = document.querySelector(material),
+      optionsBlock = document.querySelector(options),
+      promocodeBlock = document.querySelector(promocode),
+      resultBlock = document.querySelector(result);
+
+  function calcFunc(response) {
+    var chosenSizePrice, chosenMaterialPrice, chosenOptionsPrice, sum;
+    response.sizes.forEach(function (elem) {
+      if (elem.name == sizeBlock.value) {
+        chosenSizePrice = elem.price;
+      }
+    });
+    response.materials.forEach(function (elem) {
+      if (elem.name == materialBlock.value) {
+        chosenMaterialPrice = elem.price;
+      }
+    });
+    response.addOptions.forEach(function (elem) {
+      if (elem.name == optionsBlock.value) {
+        chosenOptionsPrice = elem.price;
+      }
+    });
+
+    if (!chosenOptionsPrice) {
+      sum = Math.round(+chosenSizePrice * +chosenMaterialPrice);
+    } else {
+      sum = Math.round(+chosenSizePrice * +chosenMaterialPrice + +chosenOptionsPrice);
+    }
+
+    if (sizeBlock.value == '' || materialBlock.value == '') {
+      resultBlock.textContent = "Пожалуйста, выберите размер и материал картины";
+    } else if (promocodeBlock.value === 'IWANTPOPART') {
+      resultBlock.textContent = Math.round(sum * 0.7);
+    } else {
+      resultBlock.textContent = sum;
+    }
+  }
+
+  sizeBlock.addEventListener('change', function () {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_2__["getResource"])('assets/priceList.json').then(function (res) {
+      calcFunc(res);
+    });
+  });
+  materialBlock.addEventListener('change', function () {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_2__["getResource"])('assets/priceList.json').then(function (res) {
+      calcFunc(res);
+    });
+  });
+  optionsBlock.addEventListener('change', function () {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_2__["getResource"])('assets/priceList.json').then(function (res) {
+      calcFunc(res);
+    });
+  });
+  promocodeBlock.addEventListener('input', function () {
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_2__["getResource"])('assets/priceList.json').then(function (res) {
+      calcFunc(res);
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (calc);
+
+/***/ }),
+
+/***/ "./src/js/modules/changeModalState.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/changeModalState.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var changeModalState = function changeModalState(state) {
+  var priceSizePicture = document.querySelectorAll('#size'),
+      materialPicture = document.querySelectorAll('#material'),
+      addOptions = document.querySelectorAll('#options'),
+      inputPromocode = document.querySelectorAll('.promocode');
+
+  function bindActionsToElems(event, elem, prop) {
+    elem.forEach(function (item) {
+      item.addEventListener(event, function () {
+        switch (item.nodeName) {
+          case 'INPUT':
+            state[prop] = item.value;
+            break;
+
+          case 'SELECT':
+            state[prop] = item.value;
+            break;
+        }
+      });
+    });
+  }
+
+  bindActionsToElems('change', priceSizePicture, 'size');
+  bindActionsToElems('change', materialPicture, 'material');
+  bindActionsToElems('change', addOptions, 'options');
+  bindActionsToElems('input', inputPromocode, 'promo');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (changeModalState);
 
 /***/ }),
 
@@ -4490,6 +4626,15 @@ var forms = function forms(state) {
       textMessage.textContent = message.loading;
       statusMessage.appendChild(textMessage);
       var formData = new FormData(item);
+
+      if (item.getAttribute('data-calc') === "end") {
+        formData.append('total-price', document.querySelector('.calc-price').textContent);
+
+        for (var key in state) {
+          formData.append(key, state[key]);
+        }
+      }
+
       var api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
       console.log(api);
@@ -4737,8 +4882,8 @@ var showMoreStyles = function showMoreStyles(trigger, wrapper) {
       }); */
 
   btn.addEventListener('click', function () {
-    Object(_services_requests__WEBPACK_IMPORTED_MODULE_3__["getResource"])('http://localhost:3000/styles').then(function (res) {
-      return createCards(res);
+    Object(_services_requests__WEBPACK_IMPORTED_MODULE_3__["getResource"])('assets/db.json').then(function (res) {
+      return createCards(res.styles);
     }).catch(function (error) {
       return console.log(error);
     });
@@ -4921,13 +5066,14 @@ var getResource = function getResource(url) {
           throw new Error("Could not fetch ".concat(url, ", status: ").concat(res.status));
 
         case 5:
-          _context2.next = 7;
+          console.log(res.styles);
+          _context2.next = 8;
           return regeneratorRuntime.awrap(res.json());
 
-        case 7:
+        case 8:
           return _context2.abrupt("return", _context2.sent);
 
-        case 8:
+        case 9:
         case "end":
           return _context2.stop();
       }
