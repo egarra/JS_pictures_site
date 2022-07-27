@@ -916,6 +916,14 @@ h4 {
   border: 3rem solid transparent;
   border-bottom: 3rem solid #f7e7e6;
 }
+
+.often-questions .active-style {
+  color: #E950D7;
+  font-weight: 900;
+  text-decoration: none;
+  border: 0;
+}
+
 .often-questions .ui-accordion-header-active {
   cursor: auto;
   color: #c51abb;
