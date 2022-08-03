@@ -960,6 +960,8 @@ h4 {
 .consultation .p-heading {
   text-align: center;
 }
+
+
 .status {
   text-align: center;
 }
@@ -1285,6 +1287,7 @@ h4 {
   .popup-design .file_upload > button {
     width: 100%;
   }
+ 
   .main .file_upload > div {
     display: none;
   }
@@ -1735,4 +1738,17 @@ h4 {
     padding: 3rem 3rem;
     width: 25rem;
   }
+}
+.pageup {
+  opacity: 0;
+  width: 26px ;
+  height: 26px;
+  position: fixed;
+  bottom: 100px;
+  right: 5%;
+  z-index: 30;
+  background-color: #fff;
+  cursor: pointer;
+  border: 1px solid white;
+  transition: 1s all;
 }

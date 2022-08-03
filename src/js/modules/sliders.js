@@ -1,4 +1,6 @@
 const slider = (slides, dir, prev, next) => {
+
+    document.querySelector('body').style.overflowX = 'hidden';
     let slideIndex = 1,
         paused = false;
     const items = document.querySelectorAll(slides);
